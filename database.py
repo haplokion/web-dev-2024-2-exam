@@ -56,4 +56,3 @@ class Database:
         db = g.pop('db', None)
         if db is not None:
             db.close()
-    

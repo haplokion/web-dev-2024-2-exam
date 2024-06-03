@@ -1,6 +1,5 @@
 from flask import (
     Flask,
-    Blueprint,
     render_template,
     flash
 )
@@ -32,8 +31,6 @@ def load_user(user_id):
        return User(user.id,user.login)
     return None
 
-query = "show tables;"
-
 def send_query(query, *arg):
     try:
         with db.connect().cursor(named_tuple=True) as cursor:
@@ -48,6 +45,12 @@ def send_query(query, *arg):
 
 @app.route('/')
 def index():
-    a = send_query(query)
-    flash("Успешно проверили", "success")
-    return render_template("base.html")
+    return render_template("index.html")
+
+@app.route('/login')
+def login():
+    return render_template("login.html")
+
+@app.route('/top_books')
+def top_books():
+    return render_template("top_books.html")

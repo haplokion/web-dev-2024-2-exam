@@ -1,0 +1,6 @@
+INSERT INTO users (user_login, user_password_hash, user_surname, 
+                   user_name, user_patronym, user_role) VALUES
+            ('admin', 'f03b56db82f6b9a856f518d4d34628e2', 'Админов', 'Админ',  'Админович', 1),
+            ('moderator', '8cb7641b517b421ddcf1c0254bbb954a', 'Модератов', 'Модератор',  'Модератович', 2),
+            ('user', 'f118583f69bfa487bddc493b5eab0f83', 'Юзеров', 'Юзер',  'Юзерович', 3);
+

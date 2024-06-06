@@ -4,17 +4,17 @@
     <div class="col-8">
         <form method="POST">
             <div class="mb-3">
-                <label class="col-form-label-lg">Логин</label>
-                <input type="login" name="login" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="col-form-label-lg">Пароль</label>
-                <input type="password" name="password" class="form-control" required>
-              </div>
-              <div class="mb-3 form-check">
+                <label class="col-form-label-lg" for="FormLogin">Логин</label>
+                <input type="login" name="login" id="FormLogin" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="col-form-label-lg" for="FormPassword">Пароль</label>
+                <input type="password" name="password" id="FormLogin" class="form-control" required>
+            </div>
+            <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" name="remember" id="FormCheck">
                 <label class="form-check-label" for="FormCheck">Запомнить меня</label>
-              </div>
+            </div>
               <button type="submit" class="btn btn-primary">Войти</button>
         </form>
     </div>

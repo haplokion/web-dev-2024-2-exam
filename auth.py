@@ -11,8 +11,11 @@ from flask_login import (
     LoginManager,
     UserMixin,
     login_user,
-    logout_user
+    logout_user,
+    current_user
 )
+
+from functools import wraps
 
 from check_rights import CheckRights
 
@@ -22,11 +25,12 @@ bp = Blueprint("auth", __name__)
 
 ADMIN_ROLE_ID = 1
 MODERATOR_ROLE_ID = 2
+USER_ROLE_ID = 3
 
 def init_login_manager(app):
     login_manager = LoginManager()
     login_manager.init_app(app)
-    login_manager.login_view = "login"
+    login_manager.login_view = "auth.login"
     login_manager.login_message = "Для выполнения данного действия необходимо пройти процедуру аутентификации"
     login_manager.login_message_category = "warning"
     login_manager.user_loader(load_user)
@@ -45,6 +49,9 @@ class User(UserMixin):
     
     def is_moderator(self):
         return MODERATOR_ROLE_ID == self.role
+    
+    def is_user(self):
+        return USER_ROLE_ID == self.role
     
     def can(self, action, record=None):
         check_rights = CheckRights(record)
@@ -65,6 +72,21 @@ def load_user(user_id):
         print(f"ERROR LOAD_USER: {err}")
     return None
 
+def checkRole(action):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            user_id = kwargs.get("user_id")
+            user = None
+            if user_id:
+                user = load_user(user_id)
+            if current_user.can(action,record=user) :
+                return f(*args, **kwargs)
+            flash("У вас недостаточно прав для выполнения данного действия", "danger")
+            return redirect(url_for("index"))
+        return wrapper
+    return decorator
+
 from hash import get_hash
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -84,9 +106,9 @@ def login():
                 if user_data:
                     login_user(User(user_data.user_id, user_data.user_login, user_data.user_surname, user_data.user_name, user_data.user_patronym, user_data.user_role), remember=remember)
                     flash("Вы успешно прошли аутентификацию", "success")
-                    return redirect(url_for('index'))
+                    return redirect(url_for("index"))
             flash("Невозможно аутентифицироваться с указанными логином и паролем", "danger")
-        except mysql.connector.errors.DatabaseError as err:
+        except Exception as err:
             print(f"ERROR LOGIN: {err}")
     return render_template("login.html")
 

@@ -26,17 +26,33 @@
 
 # print(get_hash(login, password))
 
-from app import db
+# from app import db
 
-def set_book_genres(book_id, genre_ids):
-    try:
-        with db.connect().cursor(named_tuple=True) as cursor:
-                for genre_id in genre_ids:
-                    query = ("INSERT INTO books_to_genres (book_id, genre_id) VALUES (%s, %s)")
-                    cursor.execute(query, (book_id, genre_id))
-                print("SUCCESS")
-                db.connect().commit()
-                return 
-    except Exception as err:
-        db.connect().rollback()
-        print(f"ERROR GET_GENRES: {err}")
+# def set_book_genres(book_id, genre_ids):
+#     try:
+
+#         with db.connect().cursor(named_tuple=True) as cursor:
+#                 for genre_id in genre_ids:
+#                     query = ("INSERT INTO books_to_genres (book_id, genre_id) VALUES (%s, %s)")
+#                     cursor.execute(query, (book_id, genre_id))
+#                 print("SUCCESS")
+#                 db.connect().commit()
+#                 return 
+#     except Exception as err:
+#         db.connect().rollback()
+#         print(f"ERROR GET_GENRES: {err}")
+
+
+# ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+# #Проверка расширения файла
+# def allowed_file(filename):
+#     return '.' in filename and \
+#            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+import mimetypes
+
+filename = input()
+
+mime_type = mimetypes.guess_type(filename)
+
+print(mime_type)

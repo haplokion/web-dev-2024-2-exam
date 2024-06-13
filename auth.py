@@ -4,7 +4,8 @@ from flask import (
     flash,
     request,
     redirect,
-    url_for
+    url_for,
+    session
 )
 
 from flask_login import (
@@ -59,6 +60,18 @@ class User(UserMixin):
         if method:
             return method()
         return False
+    
+    def review(self, book_id):
+        try:
+            with db.connect().cursor(named_tuple=True) as cursor:
+                query = ("SELECT review_id FROM reviews WHERE review_user=%s AND review_book=%s")
+                cursor.execute(query, (self.id, book_id))
+                review_id = cursor.fetchone()
+                if review_id == None:
+                    return True
+        except Exception as err:
+            print(f"USER: {err}")
+            return False
 
 def load_user(user_id):
     try:
@@ -114,5 +127,6 @@ def login():
 
 @bp.route('/logout')
 def logout():
+    session.pop("history", None)
     logout_user()
     return redirect(url_for('index'))

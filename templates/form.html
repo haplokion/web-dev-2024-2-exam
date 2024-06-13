@@ -1,48 +1,59 @@
-{% macro form(genres) %}
-<div class="row d-flex flex-grow-1 align-items-center justify-content-center">
+{% macro form(genres, extensions) %}
+<div class="row mb-3 d-flex flex-grow-1 align-items-center justify-content-center">
     <div class="col-10">
+        {% if request.endpoint == "create_book" %}
+        <h1>Создать книгу</h1>
+        {% elif request.endpoint == "edit_book" %}
+        <h1>Изменить книгу</h1>
+        {% endif %}
         <form method="POST" enctype="multipart/form-data">
             <div class="row">
-                <div class="mb-3 col-md-4">
+                <div class="col-md-4">
                     <label class="col-form-label-lg" for="FormName">Название</label>
-                    <input type="text" maxlength="64" name="name" id="FormName" class="form-control" required>
+                    <input type="text" name="name" id="FormName" class="form-control" value="{{ request.form['name'] }}" required maxlength="64">
                 </div>
-                <div class="mb-3 col-md-4">
+                <div class="col-md-4">
                     <label class="col-form-label-lg" for="FormYear">Год выпуска</label>
-                    <input type="number" min="1" max="2024" name="year" id="FormYear" class="form-control" required>
+                    <input type="number" name="year" id="FormYear" class="form-control" value="{{ request.form['year'] }}" required  min="1" max="2024">
                 </div>
-                <div class="mb-3 col-md-4">
+                <div class="col-md-4">
                     <label class="col-form-label-lg" for="FormPublisher">Издание</label>
-                    <input type="text" maxlength="64" name="publisher" id="FormPublisher" class="form-control" required>
+                    <input type="text" name="publisher" id="FormPublisher" class="form-control" value="{{ request.form['publisher'] }}" required maxlength="64">
                 </div>
-                <div class="mb-3 col-md-4">
+                <div class="col">
                     <label class="col-form-label-lg" for="FormAuthor">Автор</label>
-                    <input type="text" maxlength="64" name="author" id="FormAuthor" class="form-control" required>
+                    <input type="text" name="author" id="FormAuthor" class="form-control" value="{{ request.form['author'] }}" required maxlength="64" >
                 </div>
-                <div class="mb-3 col-md-4">
+                <div class="col">
                     <label class="col-form-label-lg" for="FormSize">Размер</label>
-                    <input type="number" min="1" name="size" id="FormSize" class="form-control" placeholder="В страницах" required>
+                    <input type="number" name="size" id="FormSize" class="form-control" value="{{ request.form['size'] }}" required placeholder="В страницах" min="1" >
                 </div>
-                <div class="mb-3 col-md-4">
+                {% if request.endpoint == "create_book" %}
+                <div class="col">
+                    <label class="col-form-label-lg" for="FormCover">Обложка</label>
+                    <input type="file" name="cover" id="FormCover" class="form-control" required accept="{% for extension in extensions %} .{{extension}}, {% endfor %}">
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="row">
+                <div class="col-12">
                     <label class="col-form-label-lg" for="FormGenre">Жанр</label>
-                    <select class="form-select" id="FormGenre" multiple="multiple">
+                    <select name="genres" id="FormGenre" class="form-control" multiple="multiple">
                         {% for genre in genres %}
                         <option value="{{ genre.genre_id }}">{{ genre.genre_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
+            </div>
 
-                <div class="mb-3 col-md-4">
-                    <label class="col-form-label-lg" for="FormCover">Обложка</label>
-                    <input type="file" name="cover" id="FormCover" class="form-control" required>
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="col-form-label-lg" for="FormDescription">Описание</label>
+                    <textarea name="description" id="FormDescription" class="form-control" value="{{ request.form['description'] }}"></textarea>
                 </div>
-
             </div>
-            <div class="mb-3 col-md-4">
-                <label class="col-form-label-lg" for="FormDescription">Описание</label>
-                <textarea name="description" id="FormDescription" class="form-control" rows="3" required></textarea>
-            </div>
-              <button type="submit" class="btn btn-primary">Войти</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
         </form>
     </div>
 </div>

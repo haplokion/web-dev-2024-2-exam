@@ -8,12 +8,7 @@ class CheckRights:
         return current_user.is_admin()
 
     def edit(self):
-        if current_user.id == self.record.id:
-            return True
-        return current_user.is_admin()
+        return current_user.is_admin() or current_user.is_moderator()
 
     def delete(self):
         return current_user.is_admin()
-
-    def show(self):
-        return True

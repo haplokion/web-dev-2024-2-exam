@@ -1,5 +1,5 @@
 from argon2 import low_level
-from hashlib import blake2b
+from hashlib import blake2b, md5
 
 def get_hash(login, password):
     login = bytes(login, 'utf-8')
@@ -14,3 +14,7 @@ def get_hash(login, password):
     password_hash = low_level.hash_secret_raw(hash_len=16, salt=salt, time_cost=12, memory_cost=65536, parallelism=4, secret=password, type=low_level.Type.D)
     password_hash = password_hash.hex()
     return password_hash
+
+def get_md5(file):
+    file_hash = md5(file).hexdigest()
+    return file_hash

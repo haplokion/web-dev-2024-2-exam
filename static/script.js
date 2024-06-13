@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('#FormGenre').select2();
+    $('select').select2();
 });
 
 // {

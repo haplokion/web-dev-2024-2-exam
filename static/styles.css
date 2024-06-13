@@ -13,3 +13,21 @@ main {
 .nav-link {
     font-size: x-large;
 }
+
+.card-img-top {
+    min-width: 100%;
+}
+
+/* img {
+    max-width: 540px;
+    max-height: 540px;
+} */
+
+nav {
+    display: flex;
+    justify-content: center;
+}
+
+/* .card {
+    width: 540px;
+} */

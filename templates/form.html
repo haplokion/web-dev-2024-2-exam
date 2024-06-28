@@ -1,4 +1,4 @@
-{% macro form(genres, extensions) %}
+{% macro form(genres, extensions, name, year, publisher, author, size, description, book_genres) %}
 <div class="row mb-3 d-flex flex-grow-1 align-items-center justify-content-center">
     <div class="col-10">
         {% if request.endpoint == "create_book" %}
@@ -10,23 +10,23 @@
             <div class="row">
                 <div class="col-md-4">
                     <label class="col-form-label-lg" for="FormName">Название</label>
-                    <input type="text" name="name" id="FormName" class="form-control" value="{{ request.form['name'] }}" required maxlength="64">
+                    <input type="text" name="name" id="FormName" class="form-control" value="{{ name }}" required maxlength="64">
                 </div>
                 <div class="col-md-4">
                     <label class="col-form-label-lg" for="FormYear">Год выпуска</label>
-                    <input type="number" name="year" id="FormYear" class="form-control" value="{{ request.form['year'] }}" required  min="1" max="2024">
+                    <input type="number" name="year" id="FormYear" class="form-control" value="{{ year }}" required  min="1" max="2024">
                 </div>
                 <div class="col-md-4">
                     <label class="col-form-label-lg" for="FormPublisher">Издание</label>
-                    <input type="text" name="publisher" id="FormPublisher" class="form-control" value="{{ request.form['publisher'] }}" required maxlength="64">
+                    <input type="text" name="publisher" id="FormPublisher" class="form-control" value="{{ publisher }}" required maxlength="64">
                 </div>
                 <div class="col">
                     <label class="col-form-label-lg" for="FormAuthor">Автор</label>
-                    <input type="text" name="author" id="FormAuthor" class="form-control" value="{{ request.form['author'] }}" required maxlength="64" >
+                    <input type="text" name="author" id="FormAuthor" class="form-control" value="{{ author }}" required maxlength="64" >
                 </div>
                 <div class="col">
                     <label class="col-form-label-lg" for="FormSize">Размер</label>
-                    <input type="number" name="size" id="FormSize" class="form-control" value="{{ request.form['size'] }}" required placeholder="В страницах" min="1" >
+                    <input type="number" name="size" id="FormSize" class="form-control" value="{{ size }}" required placeholder="В страницах" min="1" >
                 </div>
                 {% if request.endpoint == "create_book" %}
                 <div class="col">
@@ -41,7 +41,7 @@
                     <label class="col-form-label-lg" for="FormGenre">Жанр</label>
                     <select name="genres" id="FormGenre" class="form-control" multiple="multiple">
                         {% for genre in genres %}
-                        <option value="{{ genre.genre_id }}">{{ genre.genre_name }}</option>
+                        <option value="{{ genre.genre_id }}" {% for book_genre in book_genres %}{% if book_genre == genre.genre_name %} selected {% endif %}{% endfor %}>{{ genre.genre_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -50,7 +50,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label class="col-form-label-lg" for="FormDescription">Описание</label>
-                    <textarea name="description" id="FormDescription" class="form-control" value="{{ request.form['description'] }}"></textarea>
+                    <textarea name="description" id="FormDescription" class="form-control">{{ description }}</textarea>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Сохранить</button>

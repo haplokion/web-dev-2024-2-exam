@@ -443,7 +443,8 @@ def create_book():
 @checkRole("edit")
 def edit_book(book_id):
     genres = get_genres()
-    
+    book_genres = get_book_genres(book_id).split(", ")
+
     if request.method == "POST":
         book_name = request.form.get("name")
         book_description = bleach.clean(request.form.get("description"))
@@ -452,6 +453,7 @@ def edit_book(book_id):
         book_author = request.form.get("author")
         book_size = request.form.get("size")
         book_genres = request.form.getlist("genres")
+
         try:
             with db.connect().cursor(named_tuple=True) as cursor:
                 query = ("UPDATE books SET book_name=%s, book_description=%s, book_year=%s, book_publisher=%s, book_author=%s, book_size=%s WHERE book_id=%s")
@@ -470,6 +472,13 @@ def edit_book(book_id):
             print(f"ERROR EDIT_BOOK: {err}")
             db.connect().rollback()
             flash("При сохранении данных возникла ошибка. Проверьте корректность введённых данных.", "danger")
-        return render_template("edit_book.html", genres = genres, request=request)
-
-    return render_template("edit_book.html", genres = genres)
+        return render_template("edit_book.html", genres = genres, name = book_name, description = book_description, year = book_year, publisher = book_publisher, author = book_author, size = book_size, book_genres = book_genres)
+    book = get_book(book_id)
+    book_name = book.book_name
+    book_description = book.book_description
+    book_year = book.book_year
+    book_publisher = book.book_publisher
+    book_author = book.book_author
+    book_size = book.book_size
+    
+    return render_template("edit_book.html", genres = genres, name = book_name, description = book_description, year = book_year, publisher = book_publisher, author = book_author, size = book_size, book_genres = book_genres)
